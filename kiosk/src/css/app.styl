@@ -1,0 +1,67 @@
+// app global css in Stylus form
+
+body
+$app
+.q-layout
+.q-tab-panels
+  margin 0
+  padding 0
+  overflow hidden
+  width 1280px
+  height 1024px
+
+@font-face
+  font-family JetBrainsMono
+  src url(../fonts/JetBrainsMono-Regular.woff)
+
+$app
+  font-family "Avenir", Helvetica, Arial, sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  background-color #ebebeb
+
+.ds-card
+  .card-name
+    font-size 16pt
+    margin-bottom 0.5rem
+    //outline 1px solid gray
+
+.q-pagination
+  flex-direction column !important
+  justify-content start !important
+  padding-top 1rem
+
+  button
+    width 6.5rem
+
+#searchPan
+  left -4rem
+  width 80%
+
+  button.kb-b
+    font-size 14pt
+    margin .2rem .25rem
+
+  button.kb-sr
+    width 80%
+    height 6.4rem
+    font-size 24pt
+
+.p-dialog
+  font-family JetBrainsMono
+
+  .p-descr
+    padding 0 2rem
+    height 900px
+    overflow auto
+
+  .p-name
+    font-size 20pt
+    text-align center
+
+  .p-label
+    font-size 16pt
+    color #9f9f9f
+
+  .p-value
+    font-size 16pt

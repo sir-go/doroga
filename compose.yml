@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  db:
+    image: mongo:3.7.9-xenial
+    container_name: mongo
+    environment:
+      MONGO_INITDB_DATABASE: 'doroga'
+    volumes:
+      - ${PWD}/backend/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    expose:
+      - '27017'
+    networks: {net}
+
+  backend:
+    build:
+      context: ./backend
+    container_name: doroga-backend
+    environment:
+      GIN_MODE: release
+    volumes:
+      - ${PWD}/backend/config.toml:/opt/config.toml
+      - static:/var/doroga_static/
+    networks: {net}
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: doroga-frontend
+    ports: ["80:80"]
+    volumes:
+      - ${PWD}/frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks: {net}
+    depends_on:
+      - backend
+
+  kiosk:
+    build:
+      context: ./kiosk
+    container_name: doroga-kiosk
+    ports: ["8085:8085"]
+    volumes:
+      - ${PWD}/kiosk/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static:/var/doroga_static:ro
+    networks: {net}
+    depends_on:
+      - backend
+
+volumes:
+  static:
+
+networks: {net}

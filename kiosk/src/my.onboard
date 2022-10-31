@@ -1,0 +1,278 @@
+<?xml version="1.0" ?>
+<keyboard format="3.2" id="my" section="system" summary="Mobile keyboard for small screens">
+  <include file="key_defs.xml"/>
+  <!-- box containing all the keys and buttons -->
+  <!-- the rows of keys on the Onboard keyboard are counted bottom to top starting with 1 -->
+  <box border="0.5" orientation="vertical" spacing="2.0">
+    <!--- word suggestions -->
+<!--    <panel filename="my-Alpha.svg">-->
+<!--      <include file="word_suggestions.xml"/></panel>-->
+    <key_template button="true" id="layer0" show_active="false"/>
+    <panel>
+      <box orientation="vertical">
+        <!-- alpha and numbers layers -->
+        <panel>
+          <!-- Cyrillic keymaps-->
+          <panel filename="my-Alpha.svg" id="alpha-keys" layer="alpha" layout="ru,ua,by,bg,tj,ge(os),az(cyrillic),mn,mk">
+            <!-- row 2,3 and 4 of the layers -->
+<!--            <key group="alphanumeric" id="BD01" keysym="0x31" label="1" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD02" keysym="0x32" label="2" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD03" keysym="0x33" label="3" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD04" keysym="0x34" label="4" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD05" keysym="0x35" label="5" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD06" keysym="0x36" label="6" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD07" keysym="0x37" label="7" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD08" keysym="0x38" label="8" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD09" keysym="0x39" label="9" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD10" keysym="0x30" label="0" unlatch_layer="false"/>-->
+            <!-- row 4 -->
+            <key group="alphanumeric" id="AD01" svg_id="AD01-cyr"/>
+            <key group="alphanumeric" id="AD02" svg_id="AD02-cyr"/>
+            <key group="alphanumeric" id="AD03" svg_id="AD03-cyr"/>
+            <key group="alphanumeric" id="AD04" svg_id="AD04-cyr"/>
+            <key group="alphanumeric" id="AD05" svg_id="AD05-cyr"/>
+            <key group="alphanumeric" id="AD06" svg_id="AD06-cyr"/>
+            <key group="alphanumeric" id="AD07" svg_id="AD07-cyr"/>
+            <key group="alphanumeric" id="AD08" svg_id="AD08-cyr"/>
+            <key group="alphanumeric" id="AD09" svg_id="AD09-cyr"/>
+            <key group="alphanumeric" id="AD10" svg_id="AD10-cyr"/>
+            <key group="alphanumeric" id="AD11" svg_id="AD11-cyr"/>
+            <!-- row 3 -->
+            <key group="alphanumeric" id="AC01" svg_id="AC01-cyr"/>
+            <key group="alphanumeric" id="AC02" svg_id="AC02-cyr"/>
+            <key group="alphanumeric" id="AC03" svg_id="AC03-cyr"/>
+            <key group="alphanumeric" id="AC04" svg_id="AC04-cyr"/>
+            <key group="alphanumeric" id="AC05" svg_id="AC05-cyr"/>
+            <key group="alphanumeric" id="AC06" svg_id="AC06-cyr"/>
+            <key group="alphanumeric" id="AC07" svg_id="AC07-cyr"/>
+            <key group="alphanumeric" id="AC08" svg_id="AC08-cyr"/>
+            <key group="alphanumeric" id="AC09" svg_id="AC09-cyr"/>
+            <key group="alphanumeric" id="AC10" svg_id="AC10-cyr"/>
+            <key group="alphanumeric" id="AC11" keycode="35" layout="ru,tj,az(cyrillic)" svg_id="AC11-cyr"/>
+            <key group="alphanumeric" id="AC11" keycode="51" layout="ua" svg_id="AC11-cyr"/>
+            <key group="alphanumeric" id="AC11" svg_id="AC11-cyr"/>
+            <!-- row 2 -->
+<!--            <key group="shifts" id="LFSH.like_rtrn" svg_id="LFSH-cyr"/>-->
+            <key group="alphanumeric" id="AB01" svg_id="AB01-cyr"/>
+            <key group="alphanumeric" id="AB02" svg_id="AB02-cyr"/>
+            <key group="alphanumeric" id="AB03" svg_id="AB03-cyr"/>
+            <key group="alphanumeric" id="AB04" svg_id="AB04-cyr"/>
+            <key group="alphanumeric" id="AB05" svg_id="AB05-cyr"/>
+            <key group="alphanumeric" id="AB06" svg_id="AB06-cyr"/>
+            <key group="alphanumeric" id="AB07" svg_id="AB07-cyr"/>
+            <key group="alphanumeric" id="AB08" svg_id="AB08-cyr"/>
+            <key group="alphanumeric" id="AB09" svg_id="AB09-cyr"/>
+            <key group="alphanumeric" id="AB09" svg_id="AB09-cyr"/>
+            <key group="alphanumeric" id="AB10" keycode="48" layout="ru,ua,tj,az(cyrillic)" svg_id="AB10-cyr"/>
+            <key group="alphanumeric" id="AB10" keycode="49" layout="ge(os)" svg_id="AB10-cyr"/>
+            <!-- not ideal, but sacrifice ESC instead? -->
+            <key group="alphanumeric" id="AB10" keycode="51" layout="mk" svg_id="AB10-cyr"/>
+            <key group="alphanumeric" id="AB10" svg_id="AB10-cyr"/>
+            <key group="bottomrow" id="BKSP" svg_id="BKSP-cyr"/>
+          </panel>
+          <!-- Latin and other keymaps -->
+          <panel filename="my-Alpha.svg" id="alpha-keys" layer="alpha">
+            <!-- row 2,3 and 4 of the layers -->
+            <!-- row 4 -->
+            <key group="alphanumeric" id="AD01"/>
+            <key group="alphanumeric" id="AD02"/>
+            <key group="alphanumeric" id="AD03"/>
+            <key group="alphanumeric" id="AD04"/>
+            <key group="alphanumeric" id="AD05"/>
+            <key group="alphanumeric" id="AD06"/>
+            <key group="alphanumeric" id="AD07"/>
+            <key group="alphanumeric" id="AD08"/>
+            <key group="alphanumeric" id="AD09"/>
+            <key group="alphanumeric" id="AD10"/>
+            <!-- row 3 -->
+            <key group="alphanumeric" id="AC01"/>
+            <key group="alphanumeric" id="AC02"/>
+            <key group="alphanumeric" id="AC03"/>
+            <key group="alphanumeric" id="AC04"/>
+            <key group="alphanumeric" id="AC05"/>
+            <key group="alphanumeric" id="AC06"/>
+            <key group="alphanumeric" id="AC07"/>
+            <key group="alphanumeric" id="AC08"/>
+            <key group="alphanumeric" id="AC09"/>
+            <key group="alphanumeric" id="AC10" keycode="47" layout="be,fr,cm(azerty)"/>
+            <key char="'" group="alphanumeric" id="AC10" label="'"/>
+            <!-- row 2 -->
+<!--            <key group="shifts" id="LFSH.like_rtrn"/>-->
+            <key group="alphanumeric" id="AB01"/>
+            <key group="alphanumeric" id="AB02"/>
+            <key group="alphanumeric" id="AB03"/>
+            <key group="alphanumeric" id="AB04"/>
+            <key group="alphanumeric" id="AB05"/>
+            <key group="alphanumeric" id="AB06"/>
+            <key char="'" group="alphanumeric" id="AB07" label="'" layout="be,fr,cm(azerty)"/>
+            <key group="alphanumeric" id="AB07"/>
+            <key group="bottomrow" id="BKSP"/>
+          </panel>
+<!--          <panel filename="my-Numbers.svg" layer="numbers">-->
+<!--            &lt;!&ndash; row 4 &ndash;&gt;-->
+<!--            <key group="alphanumeric" id="BD01" keysym="0x31" label="1" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD02" keysym="0x32" label="2" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD03" keysym="0x33" label="3" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD04" keysym="0x34" label="4" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD05" keysym="0x35" label="5" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD06" keysym="0x36" label="6" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD07" keysym="0x37" label="7" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD08" keysym="0x38" label="8" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD09" keysym="0x39" label="9" unlatch_layer="false"/>-->
+<!--            <key group="alphanumeric" id="BD10" keysym="0x30" label="0" unlatch_layer="false"/>-->
+<!--            &lt;!&ndash; row 3 &ndash;&gt;-->
+<!--            <key group="alphanumeric" id="TAB"/>-->
+<!--            <key char="#" group="alphanumeric" id="BC02" label="#"/>-->
+<!--            <key char="%" group="alphanumeric" id="BC03" label="%"/>-->
+<!--            <key char="*" group="alphanumeric" id="BC04" label="*"/>-->
+<!--            <key char="/" group="alphanumeric" id="BC05" label="/"/>-->
+<!--            <key char="+" group="alphanumeric" id="BC06" label="+"/>-->
+<!--            <key char="-" group="alphanumeric" id="BC07" label="-"/>-->
+<!--            <key char="(" group="alphanumeric" id="BC08" label="("/>-->
+<!--            <key char=")" group="alphanumeric" id="BC09" label=")"/>-->
+<!--            <key char="'" group="alphanumeric" id="BC10" label="'"/>-->
+<!--            &lt;!&ndash; row 2 &ndash;&gt;-->
+<!--            <key group="bottomrow" id="layer2.like_rtrn" image="" label="1/3"/>-->
+<!--            <key char=";" group="alphanumeric" id="BB01" label=";"/>-->
+<!--            <key char="@" group="alphanumeric" id="BB02" label="@"/>-->
+<!--            <key char="=" group="alphanumeric" id="BB03" label="="/>-->
+<!--            <key char="?" group="alphanumeric" id="BB04" label="?"/>-->
+<!--            <key char="!" group="alphanumeric" id="BB05" label="!"/>-->
+<!--            <key char=":" group="alphanumeric" id="BB06" label=":"/>-->
+<!--            <key char="&quot;" group="alphanumeric" id="BB07" label="&quot;"/>-->
+<!--            <key group="bottomrow" id="BKSP" unlatch_layer="false"/>-->
+<!--          </panel>-->
+        </panel>
+        <panel>
+          <panel filename="my-Alpha.svg">
+            <!-- row 1 of the layer -->
+<!--            <key group="bottomrow" id="layer1.like_rtrn" label="12!@"/>-->
+            <key char="," group="alphanumeric" id="AA01" label="," unlatch_layer="false"/>
+            <key group="bottomrow" id="SPCE"/>
+            <key char="." group="alphanumeric" id="AA02" label="." unlatch_layer="false"/>
+            <key group="bottomrow" id="RTRN" popup_id="RTRN_popup"/>
+          </panel>
+        </panel>
+      </box>
+      <panel filename="my-Syms.svg" layer="syms">
+        <!-- row 4 -->
+        <key char="~" group="alphanumeric" id="CD01" label="~"/>
+        <key char="_" group="alphanumeric" id="CD02" label="_"/>
+        <key char="|" group="alphanumeric" id="CD03" label="|"/>
+        <key char="\" group="alphanumeric" id="CD04" label="\"/>
+        <key char="&lt;" group="alphanumeric" id="CD05" label="&lt;"/>
+        <key char="&gt;" group="alphanumeric" id="CD06" label="&gt;"/>
+        <key char="{" group="alphanumeric" id="CD07" label="{"/>
+        <key char="}" group="alphanumeric" id="CD08" label="}"/>
+        <key char="[" group="alphanumeric" id="CD09" label="["/>
+        <key char="]" group="alphanumeric" id="CD10" label="]"/>
+        <!-- row 3 -->
+        <key char="$" group="alphanumeric" id="CC01" label="$"/>
+        <key group="alphanumeric" id="CC02" keysym="8364" label="€"/>
+        <key char="¥" group="alphanumeric" id="CC03" label="¥"/>
+        <key char="₽" group="alphanumeric" id="CC04" label="₽"/>
+        <key char="₮" group="alphanumeric" id="CC05" label="₮" layout="mn"/>
+        <!-- Mongolian tögrög -->
+        <key char="£" group="alphanumeric" id="CC05" label="£"/>
+        <key char="&amp;" group="alphanumeric" id="CC06" label="&amp;"/>
+        <key char="§" group="alphanumeric" id="CC07" label="§"/>
+        <key char="^" group="alphanumeric" id="CC08" label="^"/>
+        <key char="`" group="alphanumeric" id="CC09" label="`"/>
+        <key char="°" group="alphanumeric" id="CC10" label="°"/>
+        <!-- row 2 -->
+        <key group="bottomrow" id="layer3.like_rtrn" label="2/3"/>
+        <key char="”" group="alphanumeric" id="CB01" label="”"/>
+        <key char="«" group="alphanumeric" id="CB02" label="«"/>
+        <key char="»" group="alphanumeric" id="CB03" label="»"/>
+        <key char="¿" group="alphanumeric" id="CB04" label="¿"/>
+        <key char="¡" group="alphanumeric" id="CB05" label="¡"/>
+        <key char="®" group="alphanumeric" id="CB06" label="®"/>
+        <key char="©" group="alphanumeric" id="CB07" label="©"/>
+        <key group="bottomrow" id="BKSP"/>
+        <!-- row 1 -->
+        <key group="bottomrow" id="layer0.like_rtrn"/>
+        <key char="„" group="alphanumeric" id="CA01" label="„"/>
+        <key group="bottomrow" id="SPCE"/>
+        <key char="…" group="alphanumeric" id="CA02" label="…"/>
+        <key group="bottomrow" id="RTRN" popup_id="RTRN_popup"/>
+      </panel>
+      <panel filename="my-Emoji.svg" layer="emoji">
+        <!-- row 4 -->
+        <key char="☺" group="symbol" id="DD01" label="☺"/>
+        <!-- U+263A WHITE SMILING FACE -->
+        <key char="😊" group="symbol" id="DD02" label="😊"/>
+        <!-- U+1F60A SMILING FACE WITH SMILING EYES -->
+        <key char="😄" group="symbol" id="DD03" label="😄"/>
+        <!-- U+1F604 SMILING FACE WITH OPEN MOUTH AND SMILING EYES -->
+        <key char="😉" group="symbol" id="DD04" label="😉"/>
+        <!-- U+1F609 WINKING FACE -->
+        <key char="😜" group="symbol" id="DD05" label="😜"/>
+        <!-- U+1F61C FACE WITH STUCK-OUT TONGUE AND WINKING EYE -->
+        <key char="😚" group="symbol" id="DD06" label="😚"/>
+        <!-- U+1F61A KISSING FACE WITH CLOSED EYES -->
+        <key char="😎" group="symbol" id="DD07" label="😎"/>
+        <!-- U+1F60E SMILING FACE WITH SUNGLASSES -->
+        <key char="😇" group="symbol" id="DD08" label="😇"/>
+        <!-- U+1F607 SMILING FACE WITH HALO -->
+        <key char="♀" group="symbol" id="DD09" label="♀"/>
+        <!-- U+2640 FEMALE SIGN -->
+        <key char="☼" group="symbol" id="DD10" label="☼"/>
+        <!-- U+263C WHITE SUN WITH RAYS -->
+        <!-- row 3 -->
+        <key char="☹" group="symbol" id="DC01" label="☹"/>
+        <!-- U+2639 WHITE FROWNING FACE -->
+        <key char="😠" group="symbol" id="DC02" label="😠"/>
+        <!-- U+1F620 ANGRY FACE -->
+        <key char="😢" group="symbol" id="DC03" label="😢"/>
+        <!-- U+1F622 CRYING FACE -->
+        <key char="😲" group="symbol" id="DC04" label="😲"/>
+        <!-- U+1F632 ASTONISHED FACE -->
+        <key char="😖" group="symbol" id="DC05" label="😖"/>
+        <!-- U+1F616 CONFOUNDED FACE -->
+        <key char="😩" group="symbol" id="DC06" label="😩"/>
+        <!-- U+1F629 WEARY FACE -->
+        <key char="😋" group="symbol" id="DC07" label="😋"/>
+        <!-- U+1F60B FACE SAVOURING DELICIOUS FOOD -->
+        <key char="😈" group="symbol" id="DC08" label="😈"/>
+        <!-- U+1F608 SMILING FACE WITH HORNS -->
+        <key char="♂" group="symbol" id="DC09" label="♂"/>
+        <!-- U+2642 MALE SIGN -->
+        <key char="☾" group="symbol" id="DC10" label="☾"/>
+        <!-- U+263E LAST QUARTER MOON -->
+        <!-- row 2 -->
+        <key group="bottomrow" id="layer1.like_rtrn" image=";" label="3/3"/>
+        <key char="♡" group="symbol" id="DB01" label="♡"/>
+        <!-- U+2661 WHITE HEART SUIT -->
+        <key char="♫" group="symbol" id="DB02" label="♫"/>
+        <!-- U+266B BEAMED EIGHTH NOTE -->
+        <key char="☏" group="symbol" id="DB03" label="☏"/>
+        <!-- U+260F WHITE TELEPHONE -->
+        <key char="✉" group="symbol" id="DB04" label="✉"/>
+        <!-- U+2709 ENVELOPE -->
+        <key char="☂" group="symbol" id="DB05" label="☂"/>
+        <!-- U+2602 UMBRELLA -->
+        <key char="☮" group="symbol" id="DB06" label="☮"/>
+        <!-- U+262E PEACE SYMBOL -->
+        <key char="☆" group="symbol" id="DB07" label="☆"/>
+        <!-- U+2606 WHITE STAR -->
+        <key group="bottomrow" id="BKSP"/>
+        <!-- row 1 of the layers -->
+        <key group="bottomrow" id="layer0.like_rtrn"/>
+        <key char="☢" group="symbol" id="DA01" label="☢"/>
+        <!-- U+2622 RADIOACTIVE SIGN -->
+        <key group="bottomrow" id="SPCE"/>
+        <key char="☯" group="symbol" id="DA02" label="☯"/>
+        <!-- U+262F YIN YANG -->
+        <key group="bottomrow" id="RTRN" popup_id="RTRN_popup"/>
+      </panel>
+    </panel>
+  </box>
+  <!-- popup definition -->
+  <layout filename="my-Alpha.svg" id="RTRN_popup">
+    <box compact="true">
+      <key id="settings"/>
+      <key id="move"/>
+      <key group="nowordlist" id="hide" image="close.svg" svg_id="hide.popup"/>
+    </box>
+  </layout>
+</keyboard>
