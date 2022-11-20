@@ -23,9 +23,10 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: 1.18
-
     - name: Test
-      run: go test -v ./...
+      run: |
+        sudo apt-get install libmagickcore-dev
+        go test -v ./...
 
   GoSec:
     runs-on: ubuntu-latest
