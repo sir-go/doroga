@@ -21,13 +21,16 @@ jobs:
       with:
         go-version: 1.18
 
-    - name: Test
-      run: go test -v ./backend/cmd/main
+    - name: Build
+      run: go build -v ./...
 
-  GoSec:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: ynniss/golang-security-action@master
-        with:
-          CODE_PATH: ./backend/cmd/main
+    - name: Test
+      run: go test -v ./...
+#
+#  GoSec:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v1
+#      - uses: ynniss/golang-security-action@master
+#        with:
+#          CODE_PATH: ./backend/cmd/main
