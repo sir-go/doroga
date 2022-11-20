@@ -5,9 +5,9 @@ name: Go
 
 on:
   push:
-    branches: [ "main", "tests" ]
+    branches: [ "tests" ]
   pull_request:
-    branches: [ "main", "tests" ]
+    branches: [ "main" ]
 
 jobs:
 
@@ -21,16 +21,15 @@ jobs:
       with:
         go-version: 1.18
 
-    - name: Build
-      run: go build -v ./...
-
     - name: Test
       run: go test -v ./...
-#
-#  GoSec:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v1
-#      - uses: ynniss/golang-security-action@master
-#        with:
-#          CODE_PATH: ./backend/cmd/main
+
+  GoSec:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
