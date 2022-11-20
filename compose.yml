@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    image: mongo:3.7.9-xenial
+    image: mongo:3.7-xenial
     container_name: mongo
     environment:
       MONGO_INITDB_DATABASE: 'doroga'
@@ -10,6 +10,7 @@ services:
       - ${PWD}/backend/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     expose:
       - '27017'
+#    ports: ["27017:27017"]
     networks: {net}
 
   backend:
