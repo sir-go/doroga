@@ -8,13 +8,16 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	zlog "github.com/rs/zerolog/log"
 )
 
 type Server struct {
 	srv *http.Server
+	dbc *DB
+	cfg *Config
 }
 
-func (s *Server) Run() {
+func (s *Server) Run(host string, port int) error {
 	//gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 
@@ -34,46 +37,44 @@ func (s *Server) Run() {
 		cors.Default(),
 	)
 
-	r.POST("/", SRV.FormProcessing)
+	r.POST("/", s.FormProcessing)
 
-	// /ds
 	ds := r.Group("ds")
-	ds.GET("/", SRV.GetDSall)
+	// /ds
+	ds.GET("/", s.GetDocumentsAll)
 
-	ds.GET("/pub", SRV.GetDSallPub)
+	ds.GET("/pub", s.GetAllDocumentsPub)
+
 	// /ds/byid/5e5d01f67520c27b0a94f774
-	ds.GET("/byid/:id", SRV.GetDS)
+	ds.GET("/byid/:id", s.GetDocuments)
 
-	// /ds/archive
 	arch := ds.Group("archive")
-	arch.GET("/", SRV.GetDSTarIndex)
-	// /ds/archive/2020-03-25.tar
-	arch.GET("/:filename", SRV.GetDSTar)
+	// /ds/archive
+	arch.GET("/", s.GetTarballsIndex)
 
-	addr := fmt.Sprintf("%s:%d", CFG.Service.Host, CFG.Service.Port)
-	LOG.Println("run web-server on http://" + addr)
+	// /ds/archive/2020-03-25.tar
+	arch.GET("/:filename", s.GetDocumentsTarball)
+
+	addr := fmt.Sprintf("%s:%d", host, port)
 
 	s.srv = &http.Server{
 		Addr:           addr,
-		WriteTimeout:   CFG.Service.Timeouts.Write.Duration,
-		ReadTimeout:    CFG.Service.Timeouts.Read.Duration,
-		IdleTimeout:    CFG.Service.Timeouts.Idle.Duration,
+		WriteTimeout:   s.cfg.Service.Timeouts.Write.Duration,
+		ReadTimeout:    s.cfg.Service.Timeouts.Read.Duration,
+		IdleTimeout:    s.cfg.Service.Timeouts.Idle.Duration,
 		MaxHeaderBytes: 1 << 20,
 		Handler:        r,
 	}
 
-	if err := s.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		if err != nil {
-			LOG.Panic(err)
-		}
-	}
+	//goland:noinspection HttpUrlsUsage
+	zlog.Info().Str("running addr", "http://"+addr).Msg("")
+
+	return s.srv.ListenAndServe()
 }
 
-func (s *Server) Shutdown() {
-	LOG.Println("shutdown web-server")
+func (s *Server) Shutdown() error {
+	zlog.Debug().Msg("shutdown web-server")
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
-	if err := s.srv.Shutdown(ctx); err != nil {
-		LOG.Panic(err)
-	}
+	return s.srv.Shutdown(ctx)
 }

@@ -1,4 +1,4 @@
-FROM golang:1.17-alpine3.16 as builder
+FROM golang:1.18-alpine3.16 as builder
 RUN apk add --no-cache build-base imagemagick-dev imagemagick
 
 WORKDIR /go/src/app

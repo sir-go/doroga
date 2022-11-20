@@ -2,17 +2,16 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"path"
 	"reflect"
 	"strings"
 	"time"
 
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
+	zlog "github.com/rs/zerolog/log"
 )
 
-type DBreq struct {
+type Document struct {
 	Id         bson.ObjectId `json:"id,omitempty" bson:"_id,omitempty"`
 	Uuid       string        `json:"uuid,omitempty" bson:",omitempty"`
 	Dt         time.Time     `json:"dt,omitempty" bson:",omitempty"`
@@ -30,7 +29,7 @@ type DBreq struct {
 	VKpost     string        `json:"vkpost,omitempty" bson:",omitempty"`
 }
 
-func (r *DBreq) AsTXT() (res string) {
+func (r *Document) String() (res string) {
 	s := reflect.ValueOf(r).Elem()
 	t := reflect.TypeOf(*r)
 	for i := 0; i < t.NumField(); i++ {
@@ -57,52 +56,56 @@ type FetchParams struct {
 }
 
 type FetchResult struct {
-	Records []DBreq `json:"records"`
-	Count   int     `json:"count"`
-	Total   int     `json:"total"`
+	Docs  []Document `json:"records"`
+	Count int        `json:"count"`
+	Total int        `json:"total"`
 }
 
-func (db *DB) RequestsGetAll() *FetchResult {
+func (db *DB) initSession() (*mgo.Collection, func()) {
 	session := db.session.Copy()
-	defer session.Close()
-	c := session.DB("").C(CFG.Db.Collection)
+	return session.DB("").C(db.collectionName), session.Close
+}
 
-	var items []DBreq
+func (db *DB) GetAll() (*FetchResult, error) {
+	c, closer := db.initSession()
+	defer closer()
+
+	var items []Document
 
 	q := c.Find(nil)
 
 	count, err := q.Count()
 	if err != nil {
-		LOG.Panic(err)
+		return nil, err
 	}
 
 	if err = q.All(&items); err != nil {
-		LOG.Panic(err)
+		return nil, err
 	}
-	return &FetchResult{Records: items, Count: count}
+
+	return &FetchResult{Docs: items, Count: count}, nil
 }
 
-func (db *DB) RequestsFetch(p FetchParams) *FetchResult {
-	session := db.session.Copy()
-	defer session.Close()
-	c := session.DB("").C(CFG.Db.Collection)
+func (db *DB) Fetch(p FetchParams) (*FetchResult, error) {
+	c, closer := db.initSession()
+	defer closer()
 
-	items := make([]DBreq, 0)
+	items := make([]Document, 0)
 
 	var query, qSearch, qDate bson.M
 
 	if p.Search != "" {
-		searchCriterias := make([]bson.M, 0)
+		searchCriteria := make([]bson.M, 0)
 		if p.SearchFields == "" || p.SearchFields == "name" {
-			searchCriterias = append(searchCriterias, bson.M{
+			searchCriteria = append(searchCriteria, bson.M{
 				"name": bson.RegEx{Pattern: p.Search, Options: "i"}})
 		} else {
-			for _, fname := range strings.Split(p.SearchFields, ",") {
-				searchCriterias = append(searchCriterias, bson.M{
-					fname: bson.RegEx{Pattern: p.Search, Options: "i"}})
+			for _, fieldName := range strings.Split(p.SearchFields, ",") {
+				searchCriteria = append(searchCriteria, bson.M{
+					fieldName: bson.RegEx{Pattern: p.Search, Options: "i"}})
 			}
 		}
-		qSearch = bson.M{"$or": searchCriterias}
+		qSearch = bson.M{"$or": searchCriteria}
 	}
 
 	if p.DateBegin != nil || p.DateEnd != nil {
@@ -131,12 +134,14 @@ func (db *DB) RequestsFetch(p FetchParams) *FetchResult {
 
 	count, err := q.Count()
 	if err != nil {
-		LOG.Panic(err)
+		zlog.Err(err).Msg("db get query records count")
+		return nil, err
 	}
 
 	total, err := c.Count()
 	if err != nil {
-		LOG.Panic(err)
+		zlog.Err(err).Msg("db get total records count")
+		return nil, err
 	}
 
 	if p.SortField != "" {
@@ -148,144 +153,121 @@ func (db *DB) RequestsFetch(p FetchParams) *FetchResult {
 	}
 
 	if p.Offset > 0 {
+		zlog.Debug().Int("offset", p.Offset).Msg("")
 		if p.Offset > count {
-			LOG.Println("query Offset: ", p.Offset, ", it > total count then offset will by ignored")
+			zlog.Debug().Msg("> total count then offset will by ignored")
 		} else {
-			LOG.Println("query Offset: ", p.Offset)
 			q = q.Skip(p.Offset)
 		}
 	}
 
-	err = q.All(&items)
-	if err != nil {
-		LOG.Panic(err)
+	if err = q.All(&items); err != nil {
+		zlog.Err(err).Msg("db get all items")
+		return nil, err
 	}
-	return &FetchResult{Records: items, Count: count, Total: total}
+
+	return &FetchResult{Docs: items, Count: count, Total: total}, nil
 }
 
-func (db *DB) RequestsGetTotal() int {
-	session := db.session.Copy()
-	defer session.Close()
-	c := session.DB("").C(CFG.Db.Collection)
+func (db *DB) GetTotal() (int, error) {
+	c, closer := db.initSession()
+	defer closer()
 
 	q, err := c.Count()
 	if err != nil {
-		LOG.Panic(err)
+		zlog.Err(err).Msg("get records total amount")
+		return 0, err
 	}
-	return q
+	return q, nil
 }
 
-func (db *DB) RequestsExistsById(id string) bool {
-	session := db.session.Copy()
-	defer session.Close()
-	c := session.DB("").C(CFG.Db.Collection)
+func (db *DB) ExistsById(id string) (bool, error) {
+	c, closer := db.initSession()
+	defer closer()
 
 	if !bson.IsObjectIdHex(id) {
-		return false
+		err := fmt.Errorf("id is not a valid mongodb object id")
+		zlog.Err(err).Msg("exists by id")
+		return false, err
 	}
 
 	count, err := c.FindId(bson.ObjectIdHex(id)).Count()
 	if err != nil {
-		if ehIsNotFound(err) {
-			return false
+		if err == mgo.ErrNotFound {
+			return false, nil
 		}
-		if err != nil {
-			LOG.Panic(err)
-		}
+		return false, err
 	}
-	if count > 0 {
-		return true
-	}
-	return false
+	return count > 0, nil
 }
 
-func (db *DB) RequestsGetAllIds() []string {
-	session := db.session.Copy()
-	defer session.Close()
-	c := session.DB("").C(CFG.Db.Collection)
+func (db *DB) GetAllIds() ([]string, error) {
+	c, closer := db.initSession()
+	defer closer()
 
 	var (
-		Records []DBreq
+		Records []Document
 		res     []string
 	)
 
 	err := c.Find(bson.M{}).Select(bson.M{"_id": 1}).All(&Records)
 	if err != nil {
-		LOG.Panic(err)
+		return nil, err
 	}
 	for _, rec := range Records {
 		res = append(res, rec.Id.Hex())
 	}
 
-	return res
+	return res, nil
 }
 
-func (db *DB) RequestsGetById(id string) *DBreq {
-	session := db.session.Copy()
-	defer session.Close()
-	c := session.DB("").C(CFG.Db.Collection)
+func (db *DB) GetById(id string) (*Document, error) {
+	c, closer := db.initSession()
+	defer closer()
 
-	var item DBreq
+	var item Document
 	if err := c.Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&item); err != nil {
-		if ehIsNotFound(err) {
-			return nil
+		if err == mgo.ErrNotFound {
+			return nil, nil
 		}
-		if err != nil {
-			LOG.Panic(err)
-		}
+		return nil, err
 	}
 
 	if item.Id.Valid() {
-		return &item
+		return &item, nil
 	}
-	return nil
+	return nil, fmt.Errorf("record id is not valid")
 }
 
-func (db *DB) RequestsGetByUUID(uuid string) *DBreq {
-	session := db.session.Copy()
-	defer session.Close()
-	c := session.DB("").C(CFG.Db.Collection)
+func (db *DB) GetByUUID(uuid string) (*Document, error) {
+	c, closer := db.initSession()
+	defer closer()
 
-	var item DBreq
+	var item Document
 	if err := c.Find(bson.M{"uuid": uuid}).One(&item); err != nil {
-		if ehIsNotFound(err) {
-			return nil
+		if err == mgo.ErrNotFound {
+			return nil, nil
 		}
-		if err != nil {
-			LOG.Panic(err)
-		}
+		return nil, err
 	}
 
 	if item.Id.Valid() {
-		return &item
+		return &item, nil
 	}
-	return nil
+	return nil, fmt.Errorf("record id is not valid")
 }
 
-func (db *DB) NewReq() *DBreq {
-	return &DBreq{Id: bson.NewObjectId()}
+func (db *DB) NewDocument() *Document {
+	return &Document{Id: bson.NewObjectId()}
 }
 
-func (db *DB) RequestInsert(item *DBreq) error {
-	session := db.session.Copy()
-	defer session.Close()
+func (db *DB) Insert(item *Document) error {
+	c, closer := db.initSession()
+	defer closer()
+
 	if !item.Id.Valid() {
 		item.Id = bson.NewObjectId()
 	}
-	return session.DB("").C(CFG.Db.Collection).Insert(item)
-}
 
-func (db *DB) RequestRemove(id string) error {
-	session := db.session.Copy()
-	defer session.Close()
-	if err := session.DB("").C(CFG.Db.Collection).RemoveId(bson.ObjectIdHex(id)); err != nil {
-		if ehIsNotFound(err) {
-			LOG.Println(id, err)
-			return nil
-		}
-		return err
-	}
-	ehSkip(os.Remove(path.Join(CFG.Storage.Path, "o", id+".jpg")))
-	ehSkip(os.Remove(path.Join(CFG.Storage.Path, "t", id+".jpg")))
-	return nil
+	return c.Insert(item)
 }
